@@ -1,5 +1,5 @@
 const square = function(number) {
-  return number*number;
+  return number * number;
 }
 
 const findLength = function(string) {
@@ -19,7 +19,7 @@ const add = function(value1, value2) {
 }
 
 const findMax = function(value1, value2) {
-  return value1 > value2 ? value1 : value2;
+  return Math.max(value1, value2);
 }
 
 module.exports = { square, findLength, isOdd, isEven, add, findMax };
