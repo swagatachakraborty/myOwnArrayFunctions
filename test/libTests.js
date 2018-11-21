@@ -1,7 +1,8 @@
 let assert = require("assert");
-let { map, filter } = require("../src/lib.js");
+let { map, filter, reduce } = require("../src/lib.js");
 let { square, findLength } = require("../src/callbackFunctions.js");
 let { isOdd, isEven } = require("../src/callbackFunctions.js");
+let { add, findMax } = require("../src/callbackFunctions.js");
 
 describe('map', function() {
   it('Should map empty array to another empty array', function () {
@@ -47,5 +48,28 @@ describe('filter', function() {
 
     assert.deepEqual(filter(isEven, [2, 3, 4]), [2,4]);
     assert.deepEqual(filter(isEven, [10,11,3]), [10]);
+  })
+})
+
+describe('reduce', function() {
+  it('Should reduce empty array to accumulator value', function () {
+    assert.deepEqual(reduce(add, 0, []), 0);
+    assert.deepEqual(reduce(findMax, 0, []), 0);
+  })
+
+  it('Should work array of one element ', function () {
+    assert.deepEqual(reduce(add, 0, [2]), 2);
+    assert.deepEqual(reduce(add, 0, [3]), 3);
+
+    assert.deepEqual(reduce(findMax, 0, [7]), 7);
+    assert.deepEqual(reduce(findMax, 0, [4]), 4);
+  })
+
+  it('Should work for array with multiple elements', function() {
+    assert.deepEqual(reduce(add, 0, [0,1]), 1);
+    assert.deepEqual(reduce(add, 0, [2,5]), 7);
+
+    assert.deepEqual(reduce(findMax, 0, [2, 3, 4]), 4);
+    assert.deepEqual(reduce(findMax, 0, [10,11,3]), 11);
   })
 })
