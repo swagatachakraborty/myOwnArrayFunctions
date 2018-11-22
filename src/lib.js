@@ -53,4 +53,18 @@ const mapPrime = function(mapper, source) {
   return reduce(mapperToReducer(mapper), sourceCopy, []);
 }
 
-module.exports = { map, mapPrime, filter, reduce, reduceRecursive};
+const filterToReducer = function(filter) {
+  return function(result, element){
+    if( filter(element) ) {
+      return result.concat(element);
+    }
+    return result;
+  }
+}
+
+const filterPrime = function(filter, source) {
+  let sourceCopy = source.slice();
+  return reduce(filterToReducer(filter), sourceCopy, []);
+}
+
+module.exports = { map, mapPrime, filter, reduce, reduceRecursive, filterPrime};
