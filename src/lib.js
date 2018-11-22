@@ -36,9 +36,21 @@ const reduceRecursive = function(reducer, source, init) {
     return init;
   }
   if(sourceCopy.length == 1) {
-    return reducer(init, sourceCopy.pop());
+    return reducer(init, sourceCopy.shift());
   } 
-  return reducer( sourceCopy.pop(), reduceRecursive(reducer, sourceCopy, init ) );
+  let firstItem = sourceCopy.shift();
+  return reduceRecursive(reducer, sourceCopy, reducer(init, firstItem));
 }
 
-module.exports = { map, filter, reduce, reduceRecursive};
+const mapperToReducer = function(mapper) {
+  return function(result, element){
+    return result.concat(mapper(element));
+  }
+}
+
+const mapPrime = function(mapper, source) {
+  let sourceCopy = source.slice();
+  return reduce(mapperToReducer(mapper), sourceCopy, []);
+}
+
+module.exports = { map, mapPrime, filter, reduce, reduceRecursive};
