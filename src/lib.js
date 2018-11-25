@@ -50,6 +50,18 @@ const mapRecursive = function(mapper, source) {
   return [mapper(clone.shift())].concat(mapRecursive(mapper, clone));
 }
 
+const filterRecursive = function(filter, source) {
+  let clone = source.slice();
+  if(clone.length == 0 ) {
+    return [];
+  }
+  let init = []
+  if(filter(clone[0])) {
+    init.push(clone[0]);
+  }
+  return init.concat(filterRecursive(filter, clone.slice(1)));
+}
+
 const mapperToReducer = function(mapper) {
   return function(result, element){
     return result.concat(mapper(element));
@@ -75,4 +87,4 @@ const filterPrime = function(filter, source) {
   return reduce(filterToReducer(filter), clone, []);
 }
 
-module.exports = { map, mapPrime, mapRecursive, reduce, reduceRecursive, filter, filterPrime};
+module.exports = { map, mapPrime, mapRecursive, reduce, reduceRecursive, filter, filterPrime, filterRecursive};
