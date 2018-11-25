@@ -17,29 +17,37 @@ const filter = function(predicate, source) {
 }
 
 const reduce = function(reducer, source, init) {
-  let sourceCopy = source.slice();
+  let clone = source.slice();
   if(init == undefined) {
-    init = sourceCopy.shift();
+    init = clone.shift();
   }
-  for(element of sourceCopy) {
+  for(element of clone) {
     init = reducer(init, element);
   }
   return init;
 }
 
 const reduceRecursive = function(reducer, source, init) {
-  let sourceCopy = source.slice();
+  let clone = source.slice();
   if(init == undefined) {
-    init = sourceCopy.shift();
+    init = clone.shift();
   }
-  if(sourceCopy.length == 0) {
+  if(clone.length == 0) {
     return init;
   }
-  if(sourceCopy.length == 1) {
-    return reducer(init, sourceCopy.shift());
+  if(clone.length == 1) {
+    return reducer(init, clone.shift());
   } 
-  let firstItem = sourceCopy.shift();
-  return reduceRecursive(reducer, sourceCopy, reducer(init, firstItem));
+  let firstItem = clone.shift();
+  return reduceRecursive(reducer, clone, reducer(init, firstItem));
+}
+
+const mapRecursive = function(mapper, source) {
+  let clone = source.slice();
+  if(clone.length == 0) {
+    return [];
+  }
+  return [mapper(clone.shift())].concat(mapRecursive(mapper, clone));
 }
 
 const mapperToReducer = function(mapper) {
@@ -49,8 +57,8 @@ const mapperToReducer = function(mapper) {
 }
 
 const mapPrime = function(mapper, source) {
-  let sourceCopy = source.slice();
-  return reduce(mapperToReducer(mapper), sourceCopy, []);
+  let clone = source.slice();
+  return reduce(mapperToReducer(mapper), clone, []);
 }
 
 const filterToReducer = function(filter) {
@@ -63,8 +71,8 @@ const filterToReducer = function(filter) {
 }
 
 const filterPrime = function(filter, source) {
-  let sourceCopy = source.slice();
-  return reduce(filterToReducer(filter), sourceCopy, []);
+  let clone = source.slice();
+  return reduce(filterToReducer(filter), clone, []);
 }
 
-module.exports = { map, mapPrime, filter, reduce, reduceRecursive, filterPrime};
+module.exports = { map, mapPrime, mapRecursive, reduce, reduceRecursive, filter, filterPrime};

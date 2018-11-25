@@ -1,5 +1,7 @@
 let assert = require("assert");
-let { map, filter, reduce, reduceRecursive, mapPrime, filterPrime } = require("../src/lib.js");
+let { map, filter, reduce } = require("../src/lib.js");
+let { reduceRecursive, mapPrime, filterPrime } = require("../src/lib.js");
+let { mapRecursive } = require("../src/lib.js");
 let { square, findLength } = require("../src/callbackFunctions.js");
 let { isOdd, isEven } = require("../src/callbackFunctions.js");
 let { add, findMax } = require("../src/callbackFunctions.js");
@@ -145,6 +147,53 @@ describe('filterPrime', function() {
 
     assert.deepEqual(filterPrime(isEven, [2, 3, 4]), [2,4]);
     assert.deepEqual(filterPrime(isEven, [10,11,3]), [10]);
+  })
+})
+
+describe.skip('filterRecuive', function() {
+  it('Should return empty array', function () {
+    assert.deepEqual(filterRecuive(isOdd, []), []);
+    assert.deepEqual(filterRecuive(isEven, []), []);
+  })
+
+  it('of array of arity one should filter that element and return filtered array ', function () {
+    assert.deepEqual(filterRecuive(isOdd, [2]), [ ]);
+    assert.deepEqual(filterRecuive(isOdd, [3]), [3]);
+
+    assert.deepEqual(filterRecuive(isEven, [7]), [ ]);
+    assert.deepEqual(filterRecuive(isEven, [4]), [4]);
+  })
+
+  it('on multiple arity array should filter those elements and return a filtered array', function() {
+    assert.deepEqual(filterRecuive(isOdd, [0,1]), [1]);
+    assert.deepEqual(filterRecuive(isOdd, [2,5]), [5]);
+
+    assert.deepEqual(filterRecuive(isEven, [2, 3, 4]), [2,4]);
+    assert.deepEqual(filterRecuive(isEven, [10,11,3]), [10]);
+  })
+})
+
+describe('mapRecursive', function() {
+  it('Should map empty array to another empty array', function () {
+    assert.deepEqual(mapRecursive(square, [ ]), []);
+    assert.deepEqual(mapRecursive(findLength, []), []);
+  })
+
+  it('of array of arity one should return array of arity one containing mapped element ', function () {
+    assert.deepEqual(mapRecursive(square, [2]), [4]);
+    assert.deepEqual(mapRecursive(square, [3]), [9]);
+
+    assert.deepEqual(mapRecursive(findLength, ["a"]), [1]);
+    assert.deepEqual(mapRecursive(findLength, ["Swagata"]), [7]);
+    assert.deepEqual(mapRecursive(findLength, [["Swagata"]]), [1]);
+  })
+
+  it('of array of arity more than one should give array of same arity of mapped elements', function() {
+    assert.deepEqual(mapRecursive(square, [0,1]), [0,1]);
+    assert.deepEqual(mapRecursive(square, [2,5]), [4,25]);
+
+    assert.deepEqual(mapRecursive(findLength, ["ab", "abc"]), [2,3]);
+    assert.deepEqual(mapRecursive(findLength, [[1,2], ["abc","b","abc"]]), [2,3]);
   })
 })
 
